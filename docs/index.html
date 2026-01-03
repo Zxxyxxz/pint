@@ -1,0 +1,314 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Pint — Full-Stack Visual Docs</title>
+
+  <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+
+  <style>
+    :root{
+      --bg:#0b0c10; --panel:#12131a; --text:#e9e9ee; --muted:#a7a7b3;
+      --line:#242535; --accent:#7c3aed; --code:#0f1117;
+    }
+    *{box-sizing:border-box}
+    body{margin:0; font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial; background:var(--bg); color:var(--text)}
+    a{color:inherit; text-decoration:none}
+    .app{display:grid; grid-template-columns: 290px 1fr; min-height:100vh}
+    .side{
+      border-right:1px solid var(--line);
+      padding:18px 14px;
+      position:sticky; top:0; height:100vh; overflow:auto;
+      background:linear-gradient(180deg, rgba(124,58,237,.12), transparent 40%);
+    }
+    .brand{display:flex; gap:10px; align-items:center; padding:10px 10px 14px}
+    .dot{width:10px; height:10px; border-radius:50%; background:var(--accent); box-shadow:0 0 18px rgba(124,58,237,.55)}
+    .brand h1{font-size:16px; margin:0}
+    .brand p{margin:0; color:var(--muted); font-size:12px}
+    .nav{margin-top:8px; display:flex; flex-direction:column; gap:6px}
+    .nav a{
+      padding:10px 10px; border:1px solid transparent; border-radius:10px;
+      color:var(--muted); background:rgba(18,19,26,.55);
+    }
+    .nav a:hover{border-color:var(--line); color:var(--text)}
+    .controls{display:flex; gap:8px; margin-top:14px; padding:0 10px}
+    button{
+      border:1px solid var(--line); background:var(--panel); color:var(--text);
+      padding:9px 10px; border-radius:10px; cursor:pointer;
+    }
+    button:hover{border-color:rgba(124,58,237,.5)}
+    .main{padding:26px 22px 60px}
+    .card{
+      border:1px solid var(--line); background:rgba(18,19,26,.7);
+      border-radius:16px; padding:18px; margin:0 0 16px;
+      box-shadow: 0 12px 40px rgba(0,0,0,.35);
+    }
+    h2{margin:0 0 10px; font-size:18px}
+    h3{margin:18px 0 8px; font-size:15px}
+    p{margin:8px 0; color:var(--muted); line-height:1.5}
+    code, pre{font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace}
+    pre{
+      background:var(--code); border:1px solid var(--line);
+      padding:12px; border-radius:14px; overflow:auto; color:#e6e6ee;
+    }
+    .pill{display:inline-block; padding:4px 10px; border:1px solid var(--line); border-radius:999px; color:var(--muted); font-size:12px}
+    .grid{display:grid; grid-template-columns:1fr 1fr; gap:12px}
+    .mermaid{background:var(--code); border:1px solid var(--line); border-radius:14px; padding:12px; overflow:auto}
+    .slideHint{font-size:12px; color:var(--muted); margin-top:10px}
+    .hidden{display:none}
+    @media (max-width: 920px){
+      .app{grid-template-columns:1fr}
+      .side{position:relative; height:auto}
+    }
+  </style>
+</head>
+
+<body>
+<div class="app">
+  <aside class="side">
+    <div class="brand">
+      <span class="dot"></span>
+      <div>
+        <h1>Pint — Visual Docs</h1>
+        <p>React + Express + Postgres + Docker + Nginx</p>
+      </div>
+    </div>
+
+    <div class="controls">
+      <button id="prevBtn">◀ Prev</button>
+      <button id="nextBtn">Next ▶</button>
+    </div>
+    <p class="slideHint" style="padding:0 10px">Tip: use ← / → keys</p>
+
+    <nav class="nav" id="nav">
+      <a href="#s0">0. What you built</a>
+      <a href="#s1">1. What “API” means</a>
+      <a href="#s2">2. Frontend vs Backend</a>
+      <a href="#s3">3. Ports & “localhost”</a>
+      <a href="#s4">4. Docker Compose mental model</a>
+      <a href="#s5">5. Nginx: why it exists here</a>
+      <a href="#s6">6. Dev vs Prod</a>
+      <a href="#s7">7. Postgres persistence (why notes survive)</a>
+      <a href="#s8">8. How requests flow (GET/POST/DELETE)</a>
+      <a href="#s9">9. How to verify everything</a>
+      <a href="#s10">10. Next upgrades</a>
+    </nav>
+  </aside>
+
+  <main class="main" id="slides">
+
+    <section class="card slide" id="s0">
+      <h2>0) What you built</h2>
+      <p>
+        You built a tiny production-style full-stack system:
+        <span class="pill">React UI</span>
+        <span class="pill">Express API</span>
+        <span class="pill">Postgres DB</span>
+        <span class="pill">Nginx proxy</span>
+        <span class="pill">Docker Compose</span>
+      </p>
+
+      <div class="mermaid">
+flowchart LR
+  B[Browser] -->|HTTP :5173| N[Nginx (web)]
+  N -->|/api/* proxied| A[Express (api) :3001]
+  A -->|SQL| D[(Postgres :5432)]
+      </div>
+    </section>
+
+    <section class="card slide" id="s1">
+      <h2>1) What “API” means</h2>
+      <p>
+        An API is a set of <b>rules + endpoints</b> that let one program talk to another over HTTP.
+        In your case, the browser is the client and Express is the server.
+      </p>
+      <pre>
+GET  /api/notes        -> list notes
+POST /api/notes        -> create note
+DELETE /api/notes/:id  -> delete note
+      </pre>
+      <p>
+        Chrome isn’t “the API” — Chrome is just the tool sending the HTTP request.
+        Your Express app is what defines what those URLs mean and what JSON comes back.
+      </p>
+    </section>
+
+    <section class="card slide" id="s2">
+      <h2>2) Frontend vs Backend</h2>
+      <div class="grid">
+        <div class="card" style="margin:0">
+          <h3>Frontend (React)</h3>
+          <p>Runs in the browser. Renders UI. Calls the backend using <code>fetch()</code>.</p>
+          <pre>fetch("/api/notes")</pre>
+        </div>
+        <div class="card" style="margin:0">
+          <h3>Backend (Express)</h3>
+          <p>Runs on the server. Validates input. Talks to Postgres. Returns JSON.</p>
+          <pre>app.get("/api/notes", ...)</pre>
+        </div>
+      </div>
+    </section>
+
+    <section class="card slide" id="s3">
+      <h2>3) Ports & “localhost”</h2>
+      <p>
+        <code>localhost</code> means “this machine”. A port is a “door”.
+      </p>
+      <pre>
+localhost:5173  -> Nginx serving your built React website
+localhost:3001  -> Express API (direct access)
+localhost:5432  -> Postgres database
+      </pre>
+      <p>
+        In production, users typically only hit the website (Nginx), and Nginx forwards <code>/api/*</code> to the API.
+      </p>
+    </section>
+
+    <section class="card slide" id="s4">
+      <h2>4) Docker Compose mental model</h2>
+      <p>
+        Compose creates a private network and runs multiple containers that can talk by service name:
+        <code>api</code>, <code>web</code>, <code>db</code>.
+      </p>
+      <pre>
+Inside docker network:
+- API reaches Postgres at host "db:5432"
+- Nginx reaches API at host "api:3001"
+      </pre>
+    </section>
+
+    <section class="card slide" id="s5">
+      <h2>5) Nginx: why it exists here</h2>
+      <p>
+        In production you don’t ship “Vite dev server”. You ship built static files (HTML/CSS/JS).
+        Nginx is excellent at serving static files and forwarding API calls.
+      </p>
+      <pre>
+location /        -> serves React build
+location /api/    -> proxy_pass http://api:3001
+      </pre>
+    </section>
+
+    <section class="card slide" id="s6">
+      <h2>6) Dev vs Prod</h2>
+      <p>
+        Dev is for fast coding (hot reload). Prod is for stability (built images, no source mounts).
+      </p>
+      <pre>
+Dev:
+- web runs "npm run dev" (Vite)
+- volumes mounted
+
+Prod:
+- web is Nginx serving /dist
+- no volumes
+      </pre>
+    </section>
+
+    <section class="card slide" id="s7">
+      <h2>7) Postgres persistence</h2>
+      <p>
+        Your notes survive <code>docker compose down</code> because of the named volume:
+        <code>pint_pgdata</code>.
+        Containers can be deleted, but volumes keep the database files.
+      </p>
+      <pre>
+volumes:
+  pint_pgdata:
+
+db:
+  volumes:
+    - pint_pgdata:/var/lib/postgresql/data
+      </pre>
+    </section>
+
+    <section class="card slide" id="s8">
+      <h2>8) Request flow (GET/POST/DELETE)</h2>
+      <pre class="mermaid">
+sequenceDiagram
+  participant Browser
+  participant Nginx
+  participant API as Express API
+  participant DB as Postgres
+
+  Browser->>Nginx: GET / (website)
+  Browser->>Nginx: GET /api/notes
+  Nginx->>API: GET /api/notes
+  API->>DB: SELECT notes
+  DB-->>API: rows
+  API-->>Nginx: JSON
+  Nginx-->>Browser: JSON
+
+  Browser->>Nginx: POST /api/notes {text}
+  Nginx->>API: POST /api/notes
+  API->>DB: INSERT note
+  DB-->>API: id
+  API-->>Browser: JSON
+      </pre>
+    </section>
+
+    <section class="card slide" id="s9">
+      <h2>9) How to verify everything fast</h2>
+      <pre>
+# website is served by nginx
+curl -I http://localhost:5173
+
+# api is reachable through nginx proxy
+curl http://localhost:5173/api/info
+curl http://localhost:5173/api/notes
+
+# direct api access (optional)
+curl http://localhost:3001/health
+      </pre>
+    </section>
+
+    <section class="card slide" id="s10">
+      <h2>10) Next upgrades</h2>
+      <p>Real backend next steps (in a good order):</p>
+      <pre>
+1) Migrations properly (schema versioning)
+2) Validation (zod/joi) + better errors
+3) Auth (simple API key or session login)
+4) Deploy to a real server
+      </pre>
+    </section>
+
+  </main>
+</div>
+
+<script>
+  mermaid.initialize({ startOnLoad: true });
+
+  const slides = Array.from(document.querySelectorAll(".slide"));
+  let idx = 0;
+
+  function show(i){
+    idx = Math.max(0, Math.min(slides.length - 1, i));
+    const id = slides[idx].id;
+    window.location.hash = id;
+    slides[idx].scrollIntoView({behavior:"smooth", block:"start"});
+  }
+
+  document.getElementById("prevBtn").onclick = () => show(idx - 1);
+  document.getElementById("nextBtn").onclick = () => show(idx + 1);
+
+  window.addEventListener("keydown", (e) => {
+    if (e.key === "ArrowRight") show(idx + 1);
+    if (e.key === "ArrowLeft") show(idx - 1);
+  });
+
+  // sync idx if user clicks nav
+  window.addEventListener("hashchange", () => {
+    const id = window.location.hash.replace("#","");
+    const newIdx = slides.findIndex(s => s.id === id);
+    if (newIdx >= 0) idx = newIdx;
+  });
+
+  // initial hash
+  const startId = window.location.hash.replace("#","");
+  const startIdx = slides.findIndex(s => s.id === startId);
+  if (startIdx >= 0) idx = startIdx;
+</script>
+</body>
+</html>
