@@ -1,0 +1,47 @@
+services:
+  db:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_USER: pint
+      POSTGRES_PASSWORD: pintpass
+      POSTGRES_DB: pintdb
+    ports:
+      - "5432:5432"
+    volumes:
+      - pint_pgdata:/var/lib/postgresql/data
+
+  api:
+    build:
+      context: ./api
+      dockerfile: Dockerfile.dev
+    environment:
+      PORT: 3001
+      PGHOST: db
+      PGPORT: 5432
+      PGUSER: pint
+      PGPASSWORD: pintpass
+      PGDATABASE: pintdb
+    ports:
+      - "3001:3001"
+    depends_on:
+      - db
+    volumes:
+      - ./api:/app
+      - /app/node_modules
+
+  web:
+    build:
+      context: ./web
+      dockerfile: Dockerfile.dev
+    environment:
+      VITE_PROXY_TARGET: "http://api:3001"
+    ports:
+      - "5173:5173"
+    depends_on:
+      - api
+    volumes:
+      - ./web:/app
+      - /app/node_modules
+
+volumes:
+  pint_pgdata:
