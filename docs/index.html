@@ -9,57 +9,282 @@
 
   <style>
     :root{
-      --bg:#0b0c10; --panel:#12131a; --text:#e9e9ee; --muted:#a7a7b3;
-      --line:#242535; --accent:#7c3aed; --code:#0f1117;
+      --bg:#0b0d12;
+      --panel:#111522;
+      --panel2:#0f1320;
+      --text:#eef0f7;
+      --muted:#b2b7c6;
+      --line:#263049;
+      --accent:#7c3aed;
+      --accent2:#22c55e;
+      --warn:#f59e0b;
+      --danger:#ef4444;
+      --code:#0a0f1a;
+      --shadow: 0 14px 44px rgba(0,0,0,.45);
+      --radius: 16px;
     }
     *{box-sizing:border-box}
-    body{margin:0; font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial; background:var(--bg); color:var(--text)}
+    html, body {height:100%}
+    body{
+      margin:0;
+      font-family: system-ui,-apple-system, Segoe UI, Roboto, Arial;
+      background: radial-gradient(1200px 700px at 15% 0%, rgba(124,58,237,.18), transparent 60%),
+                  radial-gradient(900px 600px at 90% 10%, rgba(34,197,94,.12), transparent 55%),
+                  var(--bg);
+      color:var(--text);
+    }
     a{color:inherit; text-decoration:none}
-    .app{display:grid; grid-template-columns: 290px 1fr; min-height:100vh}
+    .app{
+      display:grid;
+      grid-template-columns: 320px 1fr;
+      min-height:100vh;
+    }
     .side{
       border-right:1px solid var(--line);
-      padding:18px 14px;
-      position:sticky; top:0; height:100vh; overflow:auto;
-      background:linear-gradient(180deg, rgba(124,58,237,.12), transparent 40%);
+      padding:18px 14px 18px;
+      position:sticky;
+      top:0;
+      height:100vh;
+      overflow:auto;
+      background: linear-gradient(180deg, rgba(17,21,34,.92), rgba(11,13,18,.65));
+      backdrop-filter: blur(8px);
     }
-    .brand{display:flex; gap:10px; align-items:center; padding:10px 10px 14px}
-    .dot{width:10px; height:10px; border-radius:50%; background:var(--accent); box-shadow:0 0 18px rgba(124,58,237,.55)}
-    .brand h1{font-size:16px; margin:0}
-    .brand p{margin:0; color:var(--muted); font-size:12px}
-    .nav{margin-top:8px; display:flex; flex-direction:column; gap:6px}
-    .nav a{
-      padding:10px 10px; border:1px solid transparent; border-radius:10px;
-      color:var(--muted); background:rgba(18,19,26,.55);
+    .brand{
+      display:flex; gap:10px; align-items:flex-start;
+      padding:10px 10px 12px;
+      border:1px solid rgba(38,48,73,.7);
+      border-radius: var(--radius);
+      background: rgba(17,21,34,.55);
+      box-shadow: var(--shadow);
     }
-    .nav a:hover{border-color:var(--line); color:var(--text)}
-    .controls{display:flex; gap:8px; margin-top:14px; padding:0 10px}
+    .dot{
+      width:11px; height:11px; border-radius:50%;
+      background: linear-gradient(180deg, var(--accent), #a78bfa);
+      box-shadow: 0 0 18px rgba(124,58,237,.55);
+      margin-top:5px;
+      flex:0 0 auto;
+    }
+    .brand h1{font-size:14px; margin:0; letter-spacing:.3px}
+    .brand p{margin:4px 0 0; color:var(--muted); font-size:12px; line-height:1.3}
+    .pillRow{margin-top:10px; display:flex; flex-wrap:wrap; gap:6px}
+    .pill{
+      display:inline-flex; align-items:center; gap:7px;
+      padding:5px 10px;
+      border:1px solid rgba(38,48,73,.85);
+      border-radius:999px;
+      color:var(--muted);
+      font-size:12px;
+      background: rgba(15,19,32,.55);
+    }
+    .pill .k{width:8px; height:8px; border-radius:999px; background: var(--accent); opacity:.9}
+    .pill.ok .k{background: var(--accent2)}
+    .pill.warn .k{background: var(--warn)}
+    .controls{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:8px;
+      margin-top:12px;
+      padding:0 10px;
+    }
     button{
-      border:1px solid var(--line); background:var(--panel); color:var(--text);
-      padding:9px 10px; border-radius:10px; cursor:pointer;
+      border:1px solid rgba(38,48,73,.9);
+      background: rgba(17,21,34,.65);
+      color:var(--text);
+      padding:10px 10px;
+      border-radius: 12px;
+      cursor:pointer;
+      box-shadow: 0 10px 24px rgba(0,0,0,.22);
     }
-    button:hover{border-color:rgba(124,58,237,.5)}
-    .main{padding:26px 22px 60px}
+    button:hover{border-color: rgba(124,58,237,.55)}
+    .hint{
+      padding:10px 10px 0;
+      font-size:12px;
+      color:var(--muted);
+    }
+    .searchBox{
+      margin:14px 10px 10px;
+      display:flex;
+      gap:8px;
+      align-items:center;
+    }
+    .searchBox input{
+      width:100%;
+      padding:10px 12px;
+      border-radius: 12px;
+      border:1px solid rgba(38,48,73,.85);
+      background: rgba(15,19,32,.55);
+      color: var(--text);
+      outline:none;
+    }
+    .progress{
+      margin:8px 10px 10px;
+      height:10px;
+      border-radius: 999px;
+      background: rgba(38,48,73,.5);
+      border:1px solid rgba(38,48,73,.85);
+      overflow:hidden;
+    }
+    .progress > div{
+      height:100%;
+      width:0%;
+      background: linear-gradient(90deg, var(--accent), #a78bfa);
+    }
+    .nav{
+      margin-top:10px;
+      display:flex; flex-direction:column; gap:8px;
+      padding:0 10px 12px;
+    }
+    .nav a{
+      padding:10px 10px;
+      border:1px solid transparent;
+      border-radius: 12px;
+      color:var(--muted);
+      background: rgba(15,19,32,.35);
+    }
+    .nav a:hover{border-color: rgba(38,48,73,.85); color:var(--text)}
+    .nav a.active{
+      border-color: rgba(124,58,237,.55);
+      background: rgba(124,58,237,.12);
+      color: var(--text);
+    }
+
+    .main{
+      padding:26px 22px 80px;
+      max-width: 1100px;
+    }
+    .topbar{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:12px;
+      margin-bottom: 16px;
+    }
+    .topbar h2{
+      margin:0;
+      font-size:18px;
+      letter-spacing:.2px;
+    }
+    .tag{
+      font-size:12px;
+      color:var(--muted);
+      border:1px solid rgba(38,48,73,.85);
+      background: rgba(15,19,32,.45);
+      padding:6px 10px;
+      border-radius:999px;
+    }
+
     .card{
-      border:1px solid var(--line); background:rgba(18,19,26,.7);
-      border-radius:16px; padding:18px; margin:0 0 16px;
-      box-shadow: 0 12px 40px rgba(0,0,0,.35);
+      border:1px solid rgba(38,48,73,.85);
+      background: rgba(17,21,34,.55);
+      border-radius: var(--radius);
+      padding:18px;
+      margin:0 0 16px;
+      box-shadow: var(--shadow);
     }
-    h2{margin:0 0 10px; font-size:18px}
-    h3{margin:18px 0 8px; font-size:15px}
-    p{margin:8px 0; color:var(--muted); line-height:1.5}
-    code, pre{font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace}
+    .card h3{margin:0 0 8px; font-size:16px}
+    .card p{margin:8px 0; color:var(--muted); line-height:1.55}
+
+    code, pre{
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+    }
     pre{
-      background:var(--code); border:1px solid var(--line);
-      padding:12px; border-radius:14px; overflow:auto; color:#e6e6ee;
+      position:relative;
+      background: rgba(10,15,26,.9);
+      border:1px solid rgba(38,48,73,.85);
+      padding:12px;
+      border-radius: 14px;
+      overflow:auto;
+      color:#e6e6f2;
     }
-    .pill{display:inline-block; padding:4px 10px; border:1px solid var(--line); border-radius:999px; color:var(--muted); font-size:12px}
-    .grid{display:grid; grid-template-columns:1fr 1fr; gap:12px}
-    .mermaid{background:var(--code); border:1px solid var(--line); border-radius:14px; padding:12px; overflow:auto}
-    .slideHint{font-size:12px; color:var(--muted); margin-top:10px}
-    .hidden{display:none}
-    @media (max-width: 920px){
-      .app{grid-template-columns:1fr}
+    .copyBtn{
+      position:absolute;
+      top:10px; right:10px;
+      font-size:12px;
+      padding:6px 10px;
+      border-radius: 10px;
+      border:1px solid rgba(38,48,73,.85);
+      background: rgba(17,21,34,.75);
+      cursor:pointer;
+      color: var(--muted);
+    }
+    .copyBtn:hover{border-color: rgba(124,58,237,.55); color: var(--text)}
+
+    .grid2{display:grid; grid-template-columns:1fr 1fr; gap:12px}
+    .kpiRow{display:flex; flex-wrap:wrap; gap:10px; margin-top:10px}
+    .kpi{
+      flex:1 1 220px;
+      border:1px solid rgba(38,48,73,.85);
+      border-radius: 14px;
+      padding:12px;
+      background: rgba(15,19,32,.35);
+    }
+    .kpi b{display:block; margin-bottom:4px}
+    .kpi span{color: var(--muted); font-size:13px}
+
+    .mermaidWrap{
+      position:relative;
+      background: rgba(10,15,26,.9);
+      border:1px solid rgba(38,48,73,.85);
+      border-radius: 14px;
+      padding: 12px;
+      overflow:auto;
+    }
+    .zoomHint{
+      position:absolute;
+      right:10px; top:10px;
+      font-size:12px;
+      color: var(--muted);
+      padding:6px 10px;
+      border-radius: 10px;
+      border:1px solid rgba(38,48,73,.85);
+      background: rgba(17,21,34,.75);
+      cursor:pointer;
+    }
+    .zoomHint:hover{border-color: rgba(124,58,237,.55); color: var(--text)}
+
+    /* Modal */
+    .modal{
+      position:fixed; inset:0;
+      background: rgba(0,0,0,.6);
+      display:none;
+      align-items:center;
+      justify-content:center;
+      padding:24px;
+      z-index: 50;
+    }
+    .modal.open{display:flex}
+    .modalCard{
+      width:min(1100px, 100%);
+      max-height: 85vh;
+      overflow:auto;
+      border-radius: 18px;
+      border:1px solid rgba(38,48,73,.85);
+      background: rgba(11,13,18,.92);
+      box-shadow: 0 30px 90px rgba(0,0,0,.6);
+      padding:16px;
+    }
+    .modalTop{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:10px;
+      margin-bottom: 10px;
+    }
+    .modalTop .title{font-size:14px; color: var(--muted)}
+    .closeBtn{
+      padding:8px 10px;
+      border-radius: 12px;
+      border:1px solid rgba(38,48,73,.85);
+      background: rgba(17,21,34,.75);
+      cursor:pointer;
+      color: var(--text);
+    }
+
+    @media (max-width: 980px){
+      .app{grid-template-columns: 1fr}
       .side{position:relative; height:auto}
+      .grid2{grid-template-columns:1fr}
+      .main{padding:18px 14px 80px}
     }
   </style>
 </head>
@@ -70,8 +295,14 @@
     <div class="brand">
       <span class="dot"></span>
       <div>
-        <h1>Pint — Visual Docs</h1>
-        <p>React + Express + Postgres + Docker + Nginx</p>
+        <h1>Pint — Full-Stack Visual Docs</h1>
+        <p>Learn the real mental model behind React + Express + Postgres + Nginx + Docker.</p>
+
+        <div class="pillRow">
+          <span class="pill ok"><span class="k"></span>Prod-style nginx</span>
+          <span class="pill ok"><span class="k"></span>Postgres persistence</span>
+          <span class="pill warn"><span class="k"></span>Dev vs prod split</span>
+        </div>
       </div>
     </div>
 
@@ -79,141 +310,167 @@
       <button id="prevBtn">◀ Prev</button>
       <button id="nextBtn">Next ▶</button>
     </div>
-    <p class="slideHint" style="padding:0 10px">Tip: use ← / → keys</p>
+    <div class="hint">Tip: use <b>←</b>/<b>→</b> keys. Search filters the sidebar.</div>
+
+    <div class="searchBox">
+      <input id="search" placeholder="Search topics (e.g. nginx, ports, db, compose)..." />
+    </div>
+
+    <div class="progress"><div id="bar"></div></div>
 
     <nav class="nav" id="nav">
       <a href="#s0">0. What you built</a>
       <a href="#s1">1. What “API” means</a>
       <a href="#s2">2. Frontend vs Backend</a>
-      <a href="#s3">3. Ports & “localhost”</a>
+      <a href="#s3">3. Ports & localhost</a>
       <a href="#s4">4. Docker Compose mental model</a>
-      <a href="#s5">5. Nginx: why it exists here</a>
+      <a href="#s5">5. Nginx: why it exists</a>
       <a href="#s6">6. Dev vs Prod</a>
-      <a href="#s7">7. Postgres persistence (why notes survive)</a>
-      <a href="#s8">8. How requests flow (GET/POST/DELETE)</a>
-      <a href="#s9">9. How to verify everything</a>
+      <a href="#s7">7. Postgres persistence</a>
+      <a href="#s8">8. Request flow (GET/POST/DELETE)</a>
+      <a href="#s9">9. Verification checklist</a>
       <a href="#s10">10. Next upgrades</a>
     </nav>
   </aside>
 
-  <main class="main" id="slides">
+  <main class="main">
+    <div class="topbar">
+      <h2 id="pageTitle">0) What you built</h2>
+      <span class="tag" id="pageTag">Slide 1 / 11</span>
+    </div>
 
-    <section class="card slide" id="s0">
-      <h2>0) What you built</h2>
+    <section class="card slide" id="s0" data-title="What you built">
+      <h3>0) What you built (the real architecture)</h3>
       <p>
-        You built a tiny production-style full-stack system:
-        <span class="pill">React UI</span>
-        <span class="pill">Express API</span>
-        <span class="pill">Postgres DB</span>
-        <span class="pill">Nginx proxy</span>
-        <span class="pill">Docker Compose</span>
+        You built a tiny production-style system where the browser talks to a single entrypoint (nginx),
+        and nginx forwards API calls to Express, which talks to Postgres.
       </p>
 
-      <div class="mermaid">
+      <div class="kpiRow">
+        <div class="kpi"><b>User hits</b><span>http://localhost:5173</span></div>
+        <div class="kpi"><b>Nginx serves</b><span>React build (static files)</span></div>
+        <div class="kpi"><b>Nginx proxies</b><span>/api/* → http://api:3001</span></div>
+        <div class="kpi"><b>API queries</b><span>Postgres volume persists data</span></div>
+      </div>
+
+      <div class="mermaidWrap" id="mwrap0">
+        <div class="zoomHint" data-zoom="mwrap0">Expand diagram</div>
+        <pre class="mermaid">
 flowchart LR
   B[Browser] -->|HTTP :5173| N[Nginx (web)]
   N -->|/api/* proxied| A[Express (api) :3001]
   A -->|SQL| D[(Postgres :5432)]
+        </pre>
       </div>
     </section>
 
-    <section class="card slide" id="s1">
-      <h2>1) What “API” means</h2>
+    <section class="card slide" id="s1" data-title="What API means">
+      <h3>1) What “API” means</h3>
       <p>
-        An API is a set of <b>rules + endpoints</b> that let one program talk to another over HTTP.
-        In your case, the browser is the client and Express is the server.
+        An <b>API</b> is just a contract: <b>URLs + methods + request/response formats</b>.
+        Your Express server defines the contract. The browser just consumes it.
       </p>
-      <pre>
-GET  /api/notes        -> list notes
-POST /api/notes        -> create note
-DELETE /api/notes/:id  -> delete note
+      <pre data-copy>
+GET    /api/notes           -> list notes
+POST   /api/notes           -> create note
+DELETE /api/notes/:id       -> delete note
+GET    /api/info            -> debug info
+GET    /health              -> service + DB ping
       </pre>
       <p>
-        Chrome isn’t “the API” — Chrome is just the tool sending the HTTP request.
-        Your Express app is what defines what those URLs mean and what JSON comes back.
+        The important skill: you can look at any frontend and immediately identify
+        “what endpoints does it call, and what does the backend return?”
       </p>
     </section>
 
-    <section class="card slide" id="s2">
-      <h2>2) Frontend vs Backend</h2>
-      <div class="grid">
+    <section class="card slide" id="s2" data-title="Frontend vs Backend">
+      <h3>2) Frontend vs Backend (same app, different runtime)</h3>
+      <div class="grid2">
         <div class="card" style="margin:0">
-          <h3>Frontend (React)</h3>
-          <p>Runs in the browser. Renders UI. Calls the backend using <code>fetch()</code>.</p>
-          <pre>fetch("/api/notes")</pre>
+          <h3 style="margin-top:0">Frontend (React)</h3>
+          <p>Runs in the browser. Renders UI. Calls backend via HTTP.</p>
+          <pre data-copy>fetch("/api/notes")</pre>
+          <p>React is about state + rendering + user interaction.</p>
         </div>
         <div class="card" style="margin:0">
-          <h3>Backend (Express)</h3>
-          <p>Runs on the server. Validates input. Talks to Postgres. Returns JSON.</p>
-          <pre>app.get("/api/notes", ...)</pre>
+          <h3 style="margin-top:0">Backend (Express)</h3>
+          <p>Runs on the server. Validates input. Talks to DB. Returns JSON.</p>
+          <pre data-copy>app.get("/api/notes", async (req,res) => { ... })</pre>
+          <p>Backend is about correctness, security, and data integrity.</p>
         </div>
       </div>
     </section>
 
-    <section class="card slide" id="s3">
-      <h2>3) Ports & “localhost”</h2>
-      <p>
-        <code>localhost</code> means “this machine”. A port is a “door”.
-      </p>
-      <pre>
-localhost:5173  -> Nginx serving your built React website
-localhost:3001  -> Express API (direct access)
-localhost:5432  -> Postgres database
+    <section class="card slide" id="s3" data-title="Ports & localhost">
+      <h3>3) Ports & “localhost” (why 5173 exists)</h3>
+      <p><code>localhost</code> = your machine. Ports are different “doors” on the same machine.</p>
+      <pre data-copy>
+localhost:5173  -> Nginx serving your React build
+localhost:3001  -> Express API directly (optional)
+localhost:5432  -> Postgres (optional / dev-only)
       </pre>
       <p>
-        In production, users typically only hit the website (Nginx), and Nginx forwards <code>/api/*</code> to the API.
+        In “real prod”, you normally expose only the web entrypoint; API/DB stay private.
       </p>
     </section>
 
-    <section class="card slide" id="s4">
-      <h2>4) Docker Compose mental model</h2>
+    <section class="card slide" id="s4" data-title="Docker Compose model">
+      <h3>4) Docker Compose mental model (the networking trick)</h3>
       <p>
-        Compose creates a private network and runs multiple containers that can talk by service name:
-        <code>api</code>, <code>web</code>, <code>db</code>.
+        Compose creates a private network and gives each service a DNS name.
+        That’s why nginx can reach the API at <code>http://api:3001</code>
+        and the API can reach Postgres at <code>db:5432</code>.
       </p>
-      <pre>
-Inside docker network:
-- API reaches Postgres at host "db:5432"
-- Nginx reaches API at host "api:3001"
+      <pre data-copy>
+Inside the compose network:
+- Nginx -> API  : http://api:3001
+- API   -> DB   : db:5432
       </pre>
+      <p>
+        This is the core “container networking” concept that makes multi-service apps work.
+      </p>
     </section>
 
-    <section class="card slide" id="s5">
-      <h2>5) Nginx: why it exists here</h2>
+    <section class="card slide" id="s5" data-title="Why Nginx">
+      <h3>5) Nginx: why it exists here</h3>
       <p>
-        In production you don’t ship “Vite dev server”. You ship built static files (HTML/CSS/JS).
-        Nginx is excellent at serving static files and forwarding API calls.
+        Vite dev server is for development. In production, you ship built static files.
+        Nginx is great at serving static files and proxying API calls.
       </p>
-      <pre>
-location /        -> serves React build
-location /api/    -> proxy_pass http://api:3001
+      <pre data-copy>
+location /      -> serves React build (/usr/share/nginx/html)
+location /api/  -> proxy_pass http://api:3001
       </pre>
+      <p>
+        Bonus: your frontend and API become “same origin” (no CORS pain in prod).
+      </p>
     </section>
 
-    <section class="card slide" id="s6">
-      <h2>6) Dev vs Prod</h2>
-      <p>
-        Dev is for fast coding (hot reload). Prod is for stability (built images, no source mounts).
-      </p>
-      <pre>
+    <section class="card slide" id="s6" data-title="Dev vs Prod">
+      <h3>6) Dev vs Prod (what changes)</h3>
+      <pre data-copy>
 Dev:
-- web runs "npm run dev" (Vite)
-- volumes mounted
+- web runs Vite (hot reload)
+- bind mounts (source code)
+- fast iteration
 
 Prod:
 - web is Nginx serving /dist
-- no volumes
+- no bind mounts
+- predictable, portable images
       </pre>
+      <p>
+        This split is a big milestone: it’s the difference between “toy demo” and “real deployable app.”
+      </p>
     </section>
 
-    <section class="card slide" id="s7">
-      <h2>7) Postgres persistence</h2>
+    <section class="card slide" id="s7" data-title="Postgres persistence">
+      <h3>7) Postgres persistence (why notes survive)</h3>
       <p>
-        Your notes survive <code>docker compose down</code> because of the named volume:
-        <code>pint_pgdata</code>.
-        Containers can be deleted, but volumes keep the database files.
+        Notes survive because Postgres stores data in a named volume.
+        Containers can die; volumes keep the database files.
       </p>
-      <pre>
+      <pre data-copy>
 volumes:
   pint_pgdata:
 
@@ -221,94 +478,226 @@ db:
   volumes:
     - pint_pgdata:/var/lib/postgresql/data
       </pre>
+      <p>
+        If you run <code>docker compose down</code>, the volume stays.
+        If you run <code>docker compose down -v</code>, the volume gets deleted (data gone).
+      </p>
     </section>
 
-    <section class="card slide" id="s8">
-      <h2>8) Request flow (GET/POST/DELETE)</h2>
-      <pre class="mermaid">
+    <section class="card slide" id="s8" data-title="Request flow">
+      <h3>8) Request flow (GET/POST/DELETE)</h3>
+      <p>Read this left-to-right and you’ll “see” the system.</p>
+      <div class="mermaidWrap" id="mwrap8">
+        <div class="zoomHint" data-zoom="mwrap8">Expand diagram</div>
+        <pre class="mermaid">
 sequenceDiagram
   participant Browser
   participant Nginx
   participant API as Express API
   participant DB as Postgres
 
-  Browser->>Nginx: GET / (website)
+  Browser->>Nginx: GET /
+  Nginx-->>Browser: index.html + assets
+
   Browser->>Nginx: GET /api/notes
   Nginx->>API: GET /api/notes
-  API->>DB: SELECT notes
+  API->>DB: SELECT notes ORDER BY created_at DESC
   DB-->>API: rows
-  API-->>Nginx: JSON
-  Nginx-->>Browser: JSON
+  API-->>Nginx: JSON notes[]
+  Nginx-->>Browser: JSON notes[]
 
   Browser->>Nginx: POST /api/notes {text}
   Nginx->>API: POST /api/notes
-  API->>DB: INSERT note
-  DB-->>API: id
-  API-->>Browser: JSON
-      </pre>
+  API->>DB: INSERT note RETURNING id
+  DB-->>API: id, created_at
+  API-->>Browser: 201 JSON note
+
+  Browser->>Nginx: DELETE /api/notes/:id
+  Nginx->>API: DELETE /api/notes/:id
+  API->>DB: DELETE FROM notes WHERE id=...
+  DB-->>API: rowCount
+  API-->>Browser: JSON {deleted:true}
+        </pre>
+      </div>
     </section>
 
-    <section class="card slide" id="s9">
-      <h2>9) How to verify everything fast</h2>
-      <pre>
-# website is served by nginx
+    <section class="card slide" id="s9" data-title="Verify everything">
+      <h3>9) Verification checklist (the “I trust it” tests)</h3>
+      <p>Run these any time you’re unsure what’s happening:</p>
+      <pre data-copy>
+# 1) Web entrypoint is nginx
 curl -I http://localhost:5173
 
-# api is reachable through nginx proxy
+# 2) API reachable THROUGH nginx proxy
 curl http://localhost:5173/api/info
 curl http://localhost:5173/api/notes
 
-# direct api access (optional)
+# 3) Direct API (optional)
 curl http://localhost:3001/health
+
+# 4) Confirm DB persists
+docker compose down
+docker compose up --build
+curl http://localhost:5173/api/notes
       </pre>
+      <p>
+        If (1) shows <code>Server: nginx</code> and (2) returns JSON, your proxy + routing is correct.
+      </p>
     </section>
 
-    <section class="card slide" id="s10">
-      <h2>10) Next upgrades</h2>
-      <p>Real backend next steps (in a good order):</p>
-      <pre>
-1) Migrations properly (schema versioning)
-2) Validation (zod/joi) + better errors
-3) Auth (simple API key or session login)
-4) Deploy to a real server
+    <section class="card slide" id="s10" data-title="Next upgrades">
+      <h3>10) Next upgrades (the real backend path)</h3>
+      <pre data-copy>
+1) Proper migrations (schema versioning, up/down)
+2) Validation (zod/joi) + consistent error format
+3) Auth (API key or session login)
+4) Deploy (Render/Fly.io/DigitalOcean) + env secrets
+5) Observability (logs, request ids, basic metrics)
       </pre>
+      <p>
+        If you want, we’ll do migrations next in a clean, professional way.
+      </p>
     </section>
 
   </main>
 </div>
 
+<!-- Diagram modal -->
+<div class="modal" id="modal">
+  <div class="modalCard">
+    <div class="modalTop">
+      <div class="title" id="modalTitle">Diagram</div>
+      <button class="closeBtn" id="closeModal">Close</button>
+    </div>
+    <div id="modalBody"></div>
+  </div>
+</div>
+
 <script>
-  mermaid.initialize({ startOnLoad: true });
+  // Mermaid theme tuned for visibility
+  mermaid.initialize({
+    startOnLoad: true,
+    theme: "dark",
+    themeVariables: {
+      background: "#0a0f1a",
+      primaryColor: "#111522",
+      primaryTextColor: "#eef0f7",
+      lineColor: "#7c3aed",
+      secondaryColor: "#0f1320",
+      tertiaryColor: "#0f1320",
+      fontFamily: "system-ui"
+    }
+  });
 
   const slides = Array.from(document.querySelectorAll(".slide"));
+  const navLinks = Array.from(document.querySelectorAll("#nav a"));
+  const pageTitle = document.getElementById("pageTitle");
+  const pageTag = document.getElementById("pageTag");
+  const bar = document.getElementById("bar");
+  const search = document.getElementById("search");
+
   let idx = 0;
 
-  function show(i){
+  function setActive(i){
     idx = Math.max(0, Math.min(slides.length - 1, i));
     const id = slides[idx].id;
     window.location.hash = id;
+
+    // highlight nav
+    navLinks.forEach(a => a.classList.toggle("active", a.getAttribute("href") === "#" + id));
+
+    // header
+    const title = slides[idx].dataset.title || slides[idx].querySelector("h3")?.textContent || id;
+    pageTitle.textContent = slides[idx].querySelector("h3")?.textContent || title;
+    pageTag.textContent = `Slide ${idx+1} / ${slides.length}`;
+
+    // progress
+    const pct = ((idx) / (slides.length - 1)) * 100;
+    bar.style.width = `${pct}%`;
+
     slides[idx].scrollIntoView({behavior:"smooth", block:"start"});
   }
 
-  document.getElementById("prevBtn").onclick = () => show(idx - 1);
-  document.getElementById("nextBtn").onclick = () => show(idx + 1);
+  document.getElementById("prevBtn").onclick = () => setActive(idx - 1);
+  document.getElementById("nextBtn").onclick = () => setActive(idx + 1);
 
   window.addEventListener("keydown", (e) => {
-    if (e.key === "ArrowRight") show(idx + 1);
-    if (e.key === "ArrowLeft") show(idx - 1);
+    if (e.key === "ArrowRight") setActive(idx + 1);
+    if (e.key === "ArrowLeft") setActive(idx - 1);
+    if (e.key === "Escape") closeModal();
   });
 
-  // sync idx if user clicks nav
   window.addEventListener("hashchange", () => {
     const id = window.location.hash.replace("#","");
     const newIdx = slides.findIndex(s => s.id === id);
-    if (newIdx >= 0) idx = newIdx;
+    if (newIdx >= 0) setActive(newIdx);
   });
 
-  // initial hash
+  // Copy buttons for <pre data-copy>
+  function addCopyButtons(){
+    document.querySelectorAll("pre[data-copy]").forEach(pre => {
+      const btn = document.createElement("button");
+      btn.className = "copyBtn";
+      btn.textContent = "Copy";
+      btn.onclick = async () => {
+        try{
+          await navigator.clipboard.writeText(pre.textContent.trim());
+          btn.textContent = "Copied";
+          setTimeout(()=>btn.textContent="Copy", 900);
+        }catch{
+          btn.textContent = "Failed";
+          setTimeout(()=>btn.textContent="Copy", 900);
+        }
+      };
+      pre.appendChild(btn);
+    });
+  }
+  addCopyButtons();
+
+  // Search filter (sidebar)
+  search.addEventListener("input", () => {
+    const q = search.value.trim().toLowerCase();
+    navLinks.forEach(a => {
+      const show = a.textContent.toLowerCase().includes(q);
+      a.style.display = show ? "" : "none";
+    });
+  });
+
+  // Diagram modal (expand)
+  const modal = document.getElementById("modal");
+  const modalBody = document.getElementById("modalBody");
+  const modalTitle = document.getElementById("modalTitle");
+  const closeBtn = document.getElementById("closeModal");
+
+  function openModal(title, html){
+    modalTitle.textContent = title || "Diagram";
+    modalBody.innerHTML = "";
+    modalBody.appendChild(html);
+    modal.classList.add("open");
+  }
+  function closeModal(){
+    modal.classList.remove("open");
+    modalBody.innerHTML = "";
+  }
+  closeBtn.onclick = closeModal;
+  modal.addEventListener("click", (e) => {
+    if (e.target === modal) closeModal();
+  });
+
+  document.querySelectorAll(".zoomHint").forEach(z => {
+    z.addEventListener("click", () => {
+      const wrapId = z.dataset.zoom;
+      const wrap = document.getElementById(wrapId);
+      const cloned = wrap.cloneNode(true);
+      cloned.querySelectorAll(".zoomHint").forEach(x => x.remove());
+      openModal("Expanded diagram", cloned);
+    });
+  });
+
+  // Init from hash or start
   const startId = window.location.hash.replace("#","");
   const startIdx = slides.findIndex(s => s.id === startId);
-  if (startIdx >= 0) idx = startIdx;
+  setActive(startIdx >= 0 ? startIdx : 0);
 </script>
 </body>
 </html>
